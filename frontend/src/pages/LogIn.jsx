@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const LogIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -7,12 +8,16 @@ const LogIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Email:', email, 'Password:', password);
-  };
+    // Validate input fields
+    if (!email || !password) {
+      alert('Please enter both email and password.');
+      return;
+    }
 
-  const navigateHome = ()=>{
-    navigate('/home')
-  }
+    console.log('Email:', email, 'Password:', password);
+    // Simulate successful login
+    navigate('/home'); // Redirect to the Home route
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -24,13 +29,13 @@ const LogIn = () => {
               Email Address
             </label>
             <input
-              type="email"
               id="email"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               className="w-full px-4 py-2 mt-1 text-gray-700 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your email"
+              required
             />
           </div>
           <div>
@@ -38,17 +43,17 @@ const LogIn = () => {
               Password
             </label>
             <input
-              type="password"
               id="password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               className="w-full px-4 py-2 mt-1 text-gray-700 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your password"
+              required
             />
           </div>
           <button
-            onClick={navigateHome}
+            type="submit"
             className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Login

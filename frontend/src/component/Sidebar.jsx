@@ -1,8 +1,16 @@
 import React from 'react';
 import { FaHome, FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+
+    const navigate = useNavigate();
+
+    const navigation = ()=>{
+      navigate('/filldetails');
+    }
   return (
+    
     <div className="flex flex-col w-64 h-screen bg-gray-800 text-white">
       <div className="flex items-center justify-center h-16 border-b border-gray-700">
         <h1 className="text-xl font-bold">MyApp</h1>
@@ -15,13 +23,13 @@ const Sidebar = () => {
           <FaHome className="text-lg" />
           <span>Home</span>
         </a>
-        <a
-          href="#profile"
-          className="flex items-center px-4 py-2 space-x-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
+        <button
+          onClick={navigation}
+          className="flex w-full items-center px-4 py-2 space-x-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
         >
           <FaUser className="text-lg" />
-          <span>Profile</span>
-        </a>
+          <span>Fill Details</span>
+        </button>
         <a
           href="#settings"
           className="flex items-center px-4 py-2 space-x-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
