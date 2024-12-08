@@ -1,8 +1,17 @@
 import React from 'react'
 import Sidebar from '../component/Sidebar'
+import InfoComponent from '../component/InfoComponent'
+
+
 const Home = () => {
   return (
-    <div><Sidebar/></div>
+    <div className='flex'>
+      <Sidebar/>
+      
+      
+      <InfoComponent />
+    
+    </div>
   )
 }
 

@@ -1,27 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'
 
 const LogIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Validate input fields
-    if (!email || !password) {
-      alert('Please enter both email and password.');
-      return;
-    }
+  // Handle the form submission and send login request to the server
+  const handleSubmit = async (e) => {
+    e.preventDefault();console.log('Email:', email);
+console.log('Password:', password);
 
-    console.log('Email:', email, 'Password:', password);
-    // Simulate successful login
-    navigate('/home'); // Redirect to the Home route
+
+    try {
+      // Make the API call to login the user
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      // Parse the response
+      const data = await response.json();
+
+      console.log('Response:', response);
+console.log('Data:', data);
+
+      if (response.ok) {
+        // If login is successful
+        toast('Login successful');
+        localStorage.setItem('token', data.token); // Store JWT token
+        navigate('/home'); // Redirect to home page
+      } else {
+        // If login fails
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-gray-800">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg ">
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -29,13 +52,13 @@ const LogIn = () => {
               Email Address
             </label>
             <input
-              id="email"
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
               className="w-full px-4 py-2 mt-1 text-gray-700 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your email"
-              required
             />
           </div>
           <div>
@@ -43,13 +66,13 @@ const LogIn = () => {
               Password
             </label>
             <input
-              id="password"
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
               className="w-full px-4 py-2 mt-1 text-gray-700 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your password"
-              required
             />
           </div>
           <button
@@ -70,4 +93,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default LogIn;

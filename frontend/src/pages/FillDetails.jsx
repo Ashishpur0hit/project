@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../component/Sidebar";
 
-
 const FillDetails = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -28,7 +27,7 @@ const FillDetails = () => {
       (position) => {
         const { latitude, longitude } = position.coords;
         const location = `Lat: ${latitude}, Long: ${longitude}`;
-        setFormData((prevData) => ({ ...prevData, location }));
+        setFormData((prevData) => ({ ...prevData, location })); // Update location in the input field
         setLocationStatus("Location fetched successfully!");
       },
       () => {
@@ -37,18 +36,36 @@ const FillDetails = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    alert("Details submitted successfully!");
+
+    try {
+      const response = await fetch("http://localhost:3000/api/submit-details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert("Details submitted successfully!");
+      } else {
+        const { message } = await response.json();
+        alert(`Error: ${message}`);
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      alert("Failed to submit details.");
+    }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar></Sidebar>
+    <div className="flex min-h-screen bg-white">
+      <Sidebar />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center w-3/4 p-6">
+      <div className="flex items-center justify-center w-full p-6">
         <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-center text-gray-800">
             Patient Details
@@ -140,17 +157,24 @@ const FillDetails = () => {
               >
                 Use My Current Location
               </button>
-              {formData.location && (
-                <p className="mt-2 text-sm text-gray-700">{formData.location}</p>
-              )}
               {locationStatus && (
                 <p className="mt-2 text-sm text-gray-500">{locationStatus}</p>
               )}
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 mt-1 text-gray-700 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Location will appear here"
+              />
             </div>
 
             <button
               type="submit"
-              className="w-full px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Submit Details
             </button>
@@ -158,7 +182,7 @@ const FillDetails = () => {
 
           <button
             onClick={() => alert("Emergency Button Clicked!")}
-            className="w-full px-4 py-2 mt-4 text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-4 py-2 mt-4 text-white bg-red-600 rounded-md hover:bg-red-700  focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             Emergency
           </button>
